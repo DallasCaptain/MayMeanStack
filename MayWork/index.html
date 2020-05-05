@@ -4,18 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .showPoke{
+            display: inline-block;
+            max-width: 200px;
+            margin: 20px;
+            border: 1px solid black;
+        }
+    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
-    <div class = 'yellow'>
-        This should be yellow
+    <button class = 'yellow'>
+        get pokemon
+    </button>
+    <table id='table'>
+    </table>
+    <div id="pokemon">
+        <h1>These are the pokemon</h1>
     </div>
+    
     <script>
-
+        $('#pokemon').hide()
         $('.yellow').click(function(){
-            $.get("https://pokeapi.co/api/v2/pokemon/1/",function(data){
-                console.log(data)
-                $('.yellow').text(data.name)
+            $.get("https://pokeapi.co/api/v2/pokemon-color",function(data){
+                //console.log(data.results)
+                //$('.yellow').text(data.name)
+                // for(var i = 0; i < data.results.length; i++){
+                //     console.log(data.results[i])
+                // }
+                
+                let str = ""
+                for(let res of data.results){
+                    str+="<tr><td>"+res.name+"</td><td><button url='"+res.url+"' >get more</button></td></tr>"
+                }
+                $('#table').html(str)
+                $('table button').click(function(){
+                    // console.log($(this).attr('url'))
+                    $.get($(this).attr('url'),function(data){
+                        //console.log(data.pokemon_species)
+                        $('#pokemon').show()
+                        for(let res of data.pokemon_species){
+                            //console.log('https://pokeapi.co/api/v2/pokemon/'+res.name)
+                            let url =""
+                            $.get('https://pokeapi.co/api/v2/pokemon/'+res.name, function(data){
+                                url = data.sprites.front_default
+                                $('h1').after('<div class="showPoke">'+res.name+'<img src='+url+'></div>')
+                            })
+
+                        }
+                        
+                    })
+                })
+
+
+
+
             })
         })
 
