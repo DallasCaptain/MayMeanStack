@@ -36,20 +36,52 @@ bob.greet()
 class MailMan extends Person{
     constructor(name,age,pay){
         super(name,age)
-        this.pay = pay
+        this._pay = pay
     }
     greet(){
         console.log('Hello Speedy Delivery Here')
         super.greet()
     }
     getPaid(){
-        console.log(`Here is your pay of ${this.pay}`)
+        console.log(`Here is your pay of ${this._pay}`)
     }
+
+    get pay(){
+        return this._pay 
+    }
+    set pay(pay){
+        if (pay > this._pay*10){
+            console.log('raise is to large')
+        }
+        else{
+            this._pay = pay +10
+        }
+        
+    }
+
+
 }
 
-carl = new MailMan('Carl', 78, '$1')
+carl = new MailMan('Carl', 78, 1)
 console.log(carl)
 carl.greet()
+carl.pay = 10
 carl.getPaid()
+console.log(carl.pay)
 // bob can't get paid!!!
 // bob.getPaid()
+carl.constructor.name
+console.log(carl.constructor.name)
+function dosomething(target){
+    
+        if (target instanceof MailMan ){
+        console.log('we did it') 
+    
+        }else console.log('no we didnt')
+}
+try{
+    dosomething(zack)
+}
+catch(err){
+        console.log('not init')
+    }
