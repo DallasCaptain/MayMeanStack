@@ -1,0 +1,26 @@
+mongo stores documents
+
+JSON OBJECT
+
+USERS TABLE => COLLECTION from mongo
+1 bob boberson  => DOCUMENT from mongo
+
+
+mongodb collections
+USERS
+{
+    _id: 1,
+f_name: 'bob',
+l_name: 'boberson'
+}
+
+{
+    _id: 2,
+f_name: 'carl',
+l_name: 'carlerson',
+pet: 'evelyn'
+}
+{
+    _id: 3,
+    color: 'red'
+}
