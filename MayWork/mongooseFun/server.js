@@ -1,26 +1,16 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const session = require('express-session')
+const bcrypt = require('bcrypt')
 //const bodyParser = require('body-parser')
+
 
 
 const app = express()
 mongoose.connect("mongodb://localhost/mongooseFun", {useNewUrlParser: true})
 
-//models go here
-const PantSchema = new mongoose.Schema({
-    color: String,
-    material: String
-})
+const {User,Pants} = require('./server/models/users')
 
-const UserSchema = new mongoose.Schema({
-    name: String,
-    age: Number,
-    pants: [PantSchema]
-})
-
-const User = mongoose.model('User', UserSchema)
-const Pants = mongoose.model('Pants', PantSchema)
 
 app.use(express.static(__dirname +'/static'))
 app.set('view engine', 'ejs')
@@ -52,10 +42,26 @@ app.get('/login', (req,res)=>{
 })
 
 app.post('/sessions', (req,res)=>{
+    
+    //bcrypt.compare
+
+
     User.findOne({name:req.body.name})
     .then(user =>{
-        req.session.name = user.name
-        res.redirect('/foreach')
+        bcrypt.compare(req.body.password,user.password)
+        .then(result =>{
+            if(result){
+                req.session.name = user.name
+                res.redirect('/foreach')
+            }
+            else{
+                console.log('failed login attempt')
+                res.redirect('/login')
+            }
+            
+            
+        })
+
     })
     .catch(err =>{
         console.log('err:',err)
@@ -113,19 +119,25 @@ app.post('/users', (req,res) =>{
             const user = new User();
             user.name = req.body.name
             user.age = req.body.age
-
-            //add pants to the user before saving
-            user.pants.push(pants)
-            user.save() //{name:from the form,age:from the form}
-                .then(newUser => {
-                    console.log('We created:', newUser)
+            //bring in bcrypt to create a secure hash
+            bcrypt.hash(req.body.password, 10)
+            .then(hashed_password =>{
+                user.password = hashed_password
+                //add pants to the user before saving
+                user.pants.push(pants)
+                user.save() //{name:from the form,age:from the form}
+                    .then(newUser => {
+                        console.log('We created:', newUser)
+                        res.redirect('/')
+                })
             })
         })
     
         .catch(err => {
             console.log('Error saving user:', err)
+            res.redirect('/')
         })
-    res.redirect('/')
+    
 })
 
 app.get('/users/:id/destroy', (req,res)=>{
@@ -158,6 +170,51 @@ app.get('/foreach',(req,res)=>{
 
     
 })
+
+
+app.get('/api/v1/users',(req,res)=>{
+    User.find()
+        .then(data => {
+            res.json(data)
+        })
+        .catch(err => {
+            res.json(err)
+        })
+})
+app.post('/api/v1/users', (req,res)=>{
+    console.log('recieved api request for new user')
+    const newpants = new Pants();
+    newpants.color = req.body.color
+    newpants.material = req.body.material
+    newpants.save()
+        .then(pants =>{
+            //then create users
+            const user = new User();
+            user.name = req.body.name
+            user.age = req.body.age
+            //bring in bcrypt to create a secure hash
+            bcrypt.hash(req.body.password, 10)
+            .then(hashed_password =>{
+                user.password = hashed_password
+                //add pants to the user before saving
+                user.pants.push(pants)
+                user.save() //{name:from the form,age:from the form}
+                    .then(newUser => {
+                        //console.log('We created:', newUser)
+                        res.json(newUser)
+                })
+            })
+        })
+    
+        .catch(err => {
+            //console.log('Error saving user:', err)
+            res.json(err)
+        })
+})
+
+
+
 app.listen(8000,() => {
     console.log('started server on port 8000')
+   
 })
