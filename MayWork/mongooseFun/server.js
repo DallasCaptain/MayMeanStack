@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const session = require('express-session')
 //const bodyParser = require('body-parser')
 
 
@@ -7,13 +8,19 @@ const app = express()
 mongoose.connect("mongodb://localhost/mongooseFun", {useNewUrlParser: true})
 
 //models go here
+const PantSchema = new mongoose.Schema({
+    color: String,
+    material: String
+})
 
 const UserSchema = new mongoose.Schema({
     name: String,
-    age: Number
+    age: Number,
+    pants: [PantSchema]
 })
 
 const User = mongoose.model('User', UserSchema)
+const Pants = mongoose.model('Pants', PantSchema)
 
 app.use(express.static(__dirname +'/static'))
 app.set('view engine', 'ejs')
@@ -21,6 +28,14 @@ app.set('views', __dirname + '/views')
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(session({
+    secret: 'I solemnly swear i am upto no good',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 50000 }
+}))
+
+
 
 app.get('/', (req,res) => {
     User.find()
@@ -32,6 +47,21 @@ app.get('/', (req,res) => {
         })
 })
 
+app.get('/login', (req,res)=>{
+    res.render('login.ejs')
+})
+
+app.post('/sessions', (req,res)=>{
+    User.findOne({name:req.body.name})
+    .then(user =>{
+        req.session.name = user.name
+        res.redirect('/foreach')
+    })
+    .catch(err =>{
+        console.log('err:',err)
+        res.redirect('/login')
+    })
+})
 app.get('/home', (req,res) => {
     res.render('new.ejs')
 })
@@ -73,13 +103,25 @@ app.post('/users/:id',(req,res) =>{
     })
 })
 app.post('/users', (req,res) =>{
-    const user = new User();
-    user.name = req.body.name
-    user.age = req.body.age
-    user.save() //{name:from the form,age:from the form}
-        .then(newUser => {
-            console.log('We created:', newUser)
+    //create pants first
+    const newpants = new Pants();
+    newpants.color = req.body.color
+    newpants.material = req.body.material
+    newpants.save()
+        .then(pants =>{
+            //then create users
+            const user = new User();
+            user.name = req.body.name
+            user.age = req.body.age
+
+            //add pants to the user before saving
+            user.pants.push(pants)
+            user.save() //{name:from the form,age:from the form}
+                .then(newUser => {
+                    console.log('We created:', newUser)
+            })
         })
+    
         .catch(err => {
             console.log('Error saving user:', err)
         })
@@ -96,6 +138,26 @@ app.get('/users/:id/destroy', (req,res)=>{
     })
 })
 
+
+app.get('/foreach',(req,res)=>{
+    User.findOne({name:req.session.name})
+    .then(currentUser =>{
+        if( currentUser == null){
+            currentUser = {name:'PleaseLogin'}
+        }
+        console.log('current user is :', currentUser)
+        User.find()
+            .then(users =>{
+                res.render('foreach.ejs', {users:users,currentUser:currentUser})
+            })
+            .catch(err => {
+                console.log('Error saving user:', err)
+            })
+    })
+    
+
+    
+})
 app.listen(8000,() => {
     console.log('started server on port 8000')
 })
