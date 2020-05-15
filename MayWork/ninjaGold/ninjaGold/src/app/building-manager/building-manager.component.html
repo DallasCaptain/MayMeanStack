@@ -1,0 +1,23 @@
+<div class="container">
+    <div id="farm">
+        <h3>Farm</h3>
+        <h5>Earns 2 - 5 Gold</h5>
+        <button (click)='buildingClicked(2,5,"farm")'>Farm!</button>
+    </div>
+    <div id="cave">
+        <h3>Cave</h3>
+        <h5>Earns 5 - 10 Gold</h5>
+        <button (click)='buildingClicked(5,10,"cave")'>Cave!</button>
+    </div>
+    <div id="casino">
+        <h3>Casino</h3>
+        <h5>Earns or lose upto 100 Gold</h5>
+        <button (click)='buildingClicked(-100,100,"casino")'>Casino!</button>
+    </div>
+    <div id="house">
+        <h3>House</h3>
+        <h5>Earns 7 - 15 Gold</h5>
+        <button (click)='buildingClicked(7,15,"house")'>House!</button>
+    </div>
+</div>
+

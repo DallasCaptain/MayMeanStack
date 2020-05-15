@@ -7,6 +7,11 @@ module.exports = function(app){
 
     app.get('/tasks', (req,res)=>{
         console.log('someone asked for tasks')
-        res.json([{name:'dishes'},{name:'mop floor'}])
+        res.json([{name:'dishes'},{name:'mop the floor'}])
+    })
+
+    app.post('/tasks', (req,res)=>{
+        console.log('recieved new task:',req.body)
+        res.json(req.body)
     })
 }

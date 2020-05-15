@@ -3,22 +3,22 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import { HttpService} from './http.service'
-import { HttpClientModule } from '@angular/common/http';
-import { TaskComponent } from './task/task.component';
+import { ScoreComponent } from './score/score.component';
+import { BuildingManagerComponent } from './building-manager/building-manager.component';
+import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TaskComponent
+    ScoreComponent,
+    BuildingManagerComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
+    AppRoutingModule
   ],
-  providers: [HttpService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

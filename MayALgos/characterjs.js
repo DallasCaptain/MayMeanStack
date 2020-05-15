@@ -3,3 +3,11 @@ if("z" > "S"){
 }else{
     console.log('False')
 }
+
+
+
+//censor
+'Snap xxxxxle pop noncomxxxx' ['crack','poop']
+
+//bad characters
+'snp rkl pop' 'ace'
