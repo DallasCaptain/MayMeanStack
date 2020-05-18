@@ -1,0 +1,12 @@
+{{person | json}}
+<form (submit)="create()">
+    <label for="name">Name:</label>
+    <input type="text" name="name" [(ngModel)]='person.name'>
+    <label for="favColor">Color:</label>
+    <input type="text" name="favColor" [(ngModel)]='person.color'>
+    <input type="submit" value="Submit">
+</form>
+
+
+
+<button (click)="setPerson()">Set Person to bob</button>
