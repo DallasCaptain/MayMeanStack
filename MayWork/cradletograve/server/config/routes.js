@@ -1,3 +1,5 @@
+const Thingamabobs = require('../controllers/thingamabobs')
+
 module.exports = function(app){
 
     app.get('/', (req,res) => {
@@ -10,4 +12,11 @@ module.exports = function(app){
         
     })
 
+    app.get('/api/thingamabobs', (req,res) => {
+        Thingamabobs.all(req,res)
+    })
+
+    app.post('/api/thingamabobs', (req,res) => {
+        Thingamabobs.create(req,res)
+    })
 }

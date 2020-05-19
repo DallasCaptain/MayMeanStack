@@ -1,6 +1,5 @@
-<h1>{{title}}</h1>
-<h2>{{anotherAttr}}</h2>
-
-<app-bear></app-bear>
 
 <router-outlet></router-outlet>
+<h1>{{title}}</h1>
+<button [routerLink]="['/thingys']">Show Thingys</button>
+<button [routerLink]="['/thingys/new']">Create Thingy</button>

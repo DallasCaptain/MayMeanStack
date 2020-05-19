@@ -1,0 +1,11 @@
+
+
+<form (submit)='createThingy()'>
+    <label for="name">Name:</label>
+    <input type="text" name='name' [(ngModel)]='newthingy.name'>
+    <label for="name">Color:</label>
+    <input type="text" name='color' [(ngModel)]='newthingy.color'>
+    <label for="name">Material:</label>
+    <input type="text" name='material' [(ngModel)]='newthingy.material'>
+    <input type="submit" value="Create">
+</form>

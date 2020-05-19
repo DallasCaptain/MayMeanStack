@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class HttpService {
+  
 
   constructor(private _http: HttpClient) { }
 
@@ -29,6 +30,16 @@ export class HttpService {
 
   destroyUser(userToDestroy){
     return this._http.delete('/users/'+userToDestroy.id)
+  }
+
+  //THINGAMABOBS
+
+  getAll_thingamabobs(){
+    return this._http.get('/api/thingamabobs')
+  }
+
+  createThingy(newthingy: { name: string; color: string; material: string; }) {
+    return this._http.post('/api/thingamabobs', newthingy)
   }
 
 }
