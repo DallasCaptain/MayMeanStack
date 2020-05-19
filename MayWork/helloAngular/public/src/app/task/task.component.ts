@@ -7,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TaskComponent implements OnInit {
   title = "new task"
-  constructor() { }
+  constructor() {
+    console.log('constructed new tasks component')
+   }
 
   ngOnInit() {
+    console.log('initialized new tasks component')
   }
+
   onChangeTitleClick(){
     this.title += 'more stuff'
   }

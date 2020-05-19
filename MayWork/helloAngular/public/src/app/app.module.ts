@@ -7,11 +7,13 @@ import { AppComponent } from './app.component';
 import { HttpService} from './http.service'
 import { HttpClientModule } from '@angular/common/http';
 import { TaskComponent } from './task/task.component';
+import { ColorComponent } from './color/color.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TaskComponent
+    TaskComponent,
+    ColorComponent
   ],
   imports: [
     BrowserModule,

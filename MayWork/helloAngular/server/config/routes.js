@@ -5,12 +5,12 @@ module.exports = function(app){
         //res.send('hello from routes')
     })
 
-    app.get('/tasks', (req,res)=>{
+    app.get('/api/tasks', (req,res)=>{
         console.log('someone asked for tasks')
         res.json([{name:'dishes'},{name:'mop the floor'}])
     })
 
-    app.post('/tasks', (req,res)=>{
+    app.post('/api/tasks', (req,res)=>{
         console.log('recieved new task:',req.body)
         res.json(req.body)
     })

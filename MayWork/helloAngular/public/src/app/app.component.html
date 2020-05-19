@@ -9,8 +9,8 @@
     </ul>
 
     <button (click)='onClickAddTask()'>Add a task</button>
-
-    <app-task></app-task>
-    <app-task></app-task>
+    <button [routerLink]="['/tasks']">Goto Tasks</button>
+    <button [routerLink]="['/tasks2']">Goto Tasks2</button>
+    <button [routerLink]="['/tasks2/color','purple']">Goto Tasks2 Color</button>
 
 <router-outlet></router-outlet>
